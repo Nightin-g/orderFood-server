@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.orderfood.demos.web.mapper.UserMapper">
+
+    <!-- 这里可以添加一些公共的sql片段 -->
+    <sql id="Base_Column_List">
+        user_id, user_account, password, user_name, phone_num, address, sex, user_photo, create_time, user_status
+    </sql>
+    
+    <!-- insert语句 -->
+    <insert id="insert" parameterType="com.example.orderfood.demos.web.model.User">
+        INSERT INTO user (user_account, password, user_name, phone_num, address, sex, user_photo, create_time, user_status)
+        VALUES (#{userAccount}, #{password}, #{userName}, #{phoneNum}, #{address}, #{sex}, #{userPhoto}, #{createTime}, #{userStatus})
+    </insert>
+    
+    
+    
+    <update id="updatePassword" parameterType="com.example.orderfood.demos.web.DTO.UserUpdateDTO">
+        UPDATE user SET password = #{password} WHERE user_id = #{userId}
+    </update>
+    
+    <!-- updateSelective语句模板 -->
+    <update id="updateSelective" parameterType="com.example.orderfood.demos.web.model.User">
+        <!-- 具体的update语句由用户补充 -->
+    </update>
+    
+    <!-- deleteById语句 -->
+    <delete id="deleteById" parameterType="java.math.BigInteger">
+        DELETE FROM user WHERE user_id = #{userId}
+    </delete>
+    
+    <!-- selectById语句 -->
+    <select id="selectById" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.User">
+        SELECT <include refid="Base_Column_List" />
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
+    
+    <!-- selectAll语句 -->
+    <select id="selectAll" resultType="com.example.orderfood.demos.web.model.User">
+        SELECT <include refid="Base_Column_List" />
+        FROM user
+    </select>
+    
+    <!-- selectByExample语句模板 -->
+    <select id="selectByExample" parameterType="com.example.orderfood.demos.web.model.User" resultType="com.example.orderfood.demos.web.model.User">
+        <!-- 具体的select语句由用户补充 -->
+    </select>
+    
+    <!-- 根据用户名查询用户 -->
+    <select id="selectByUserAccount" parameterType="java.lang.String" resultType="com.example.orderfood.demos.web.model.User">
+        SELECT <include refid="Base_Column_List" />
+        FROM user
+        WHERE user_account = #{userAccount}
+    </select>
+    
+    <!-- 更新用户信息 -->
+    <update id="updateUserInfo" parameterType="com.example.orderfood.demos.web.model.User">
+        UPDATE user 
+        SET user_name = #{userName},
+            sex = #{sex},
+            address = #{address},
+            user_photo = #{userPhoto}
+        WHERE user_id = #{userId}
+    </update>
+    
+</mapper>

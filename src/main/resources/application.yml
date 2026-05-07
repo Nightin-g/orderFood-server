@@ -1,0 +1,58 @@
+# THYMELEAF (ThymeleafAutoConfiguration)
+file:
+  upload:
+    path: D:\Code\test\upload
+    max-size: 10MB
+    allowed-types: image/jpeg,image/png,image/gif
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  web:
+    resources:
+      static-locations: classpath:/static/, file:${file.upload.path}
+  thymeleaf:
+    cache: false
+    check-template: true
+    check-template-location: true
+    content-type: text/html
+    enabled: true
+    encoding: UTF-8
+    excluded-view-names: ''
+    mode: HTML
+    prefix: classpath:/templates/
+    suffix: .html
+  
+  # 数据源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/orderfood?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+
+# Redis
+  redis:
+    database: 0
+    timeout: 1200
+    host: 192.168.19.133
+    port: 6379
+    password:
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+
+server:
+  port: 8082
+  servlet:
+    context-path: /
+
+mybatis:
+  type-aliases-package: com.example.orderfood.demos.web.model
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true

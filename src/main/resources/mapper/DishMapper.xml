@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.orderfood.demos.web.mapper.DishMapper">
+
+    <sql id="Base_Column_List">
+        dish_id, dish_name, dish_status, for_sale, category_id, price,
+        dish_sales, dish_score, dish_score_person, dish_photo_id, dish_photo, ingredients, create_time, shop_id
+    </sql>
+
+    <insert id="insert" parameterType="com.example.orderfood.demos.web.model.Dish">
+        INSERT INTO dish (dish_name, dish_status, for_sale, category_id, price,
+                         dish_sales, dish_score, dish_score_person, dish_photo_id, dish_photo, ingredients, create_time, shop_id)
+        VALUES (#{dishName}, #{dishStatus}, #{forSale}, #{categoryId}, #{price},
+               #{dishSales}, #{dishScore}, #{dishScorePerson}, #{dishPhotoId}, #{dishPhoto}, #{ingredients}, #{createTime}, #{shopId})
+    </insert>
+
+    <update id="updateById" parameterType="com.example.orderfood.demos.web.model.Dish">
+        UPDATE dish
+        SET dish_name = #{dishName},
+            dish_status = #{dishStatus},
+            for_sale = #{forSale},
+            category_id = #{categoryId},
+            price = #{price},
+            dish_sales = #{dishSales},
+            dish_score = #{dishScore},
+            dish_score_person = #{dishScorePerson},
+            dish_photo_id = #{dishPhotoId},
+            dish_photo = #{dishPhoto},
+            ingredients = #{ingredients}
+        WHERE dish_id = #{dishId}
+    </update>
+
+    <update id="updateSelective" parameterType="com.example.orderfood.demos.web.model.Dish">
+        UPDATE dish
+        <set>
+            <if test="dishName != null">dish_name = #{dishName},</if>
+            <if test="dishStatus != null">dish_status = #{dishStatus},</if>
+            <if test="forSale != null">for_sale = #{forSale},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="dishSales != null">dish_sales = #{dishSales},</if>
+            <if test="dishScore != null">dish_score = #{dishScore},</if>
+            <if test="dishScorePerson != null">dish_score_person = #{dishScorePerson},</if>
+            <if test="dishPhotoId != null">dish_photo_id = #{dishPhotoId},</if>
+            <if test="dishPhoto != null">dish_photo = #{dishPhoto},</if>
+            <if test="ingredients != null">ingredients = #{ingredients},</if>
+        </set>
+        WHERE dish_id = #{dishId}
+    </update>
+
+    <delete id="deleteById" parameterType="java.math.BigInteger">
+        DELETE FROM dish WHERE dish_id = #{dishId}
+    </delete>
+
+    <select id="selectById" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.Dish">
+        SELECT <include refid="Base_Column_List" />
+        FROM dish
+        WHERE dish_id = #{dishId}
+    </select>
+
+    <select id="selectAll" resultType="com.example.orderfood.demos.web.model.Dish">
+        SELECT <include refid="Base_Column_List" />
+        FROM dish
+        WHERE dish_status != 4
+    </select>
+
+    <select id="selectByExample" parameterType="com.example.orderfood.demos.web.model.Dish" resultType="com.example.orderfood.demos.web.model.Dish">
+        SELECT <include refid="Base_Column_List" />
+        FROM dish
+        <where>
+            <if test="dishId != null">AND dish_id = #{dishId}</if>
+            <if test="dishName != null">AND dish_name LIKE CONCAT('%', #{dishName}, '%')</if>
+            <if test="dishStatus != null">AND dish_status = #{dishStatus}</if>
+            <if test="forSale != null">AND for_sale = #{forSale}</if>
+            <if test="categoryId != null">AND category_id = #{categoryId}</if>
+            <if test="shopId != null">AND shop_id = #{shopId}</if>
+        </where>
+        AND dish_status != 4
+    </select>
+
+    <select id="selectPendingReview" resultType="com.example.orderfood.demos.web.model.Dish">
+        SELECT <include refid="Base_Column_List" />
+        FROM dish
+        WHERE dish_status = 0
+    </select>
+
+</mapper>

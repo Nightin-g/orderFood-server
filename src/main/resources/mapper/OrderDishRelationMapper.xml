@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.orderfood.demos.web.mapper.OrderDishRelationMapper">
+
+    <!-- 这里可以添加一些公共的sql片段 -->
+    <sql id="Base_Column_List">
+        od_id, dish_id, order_id
+    </sql>
+    
+    <!-- insert语句 -->
+    <insert id="insert" parameterType="com.example.orderfood.demos.web.model.OrderDishRelation">
+        INSERT INTO order_dish_relation (dish_id, order_id)
+        VALUES (#{dishId}, #{orderId})
+    </insert>
+    
+    <!-- deleteById语句 -->
+    <delete id="deleteById" parameterType="java.math.BigInteger">
+        DELETE FROM order_dish_relation WHERE od_id = #{odID}
+    </delete>
+    
+    <!-- selectById语句 -->
+    <select id="selectById" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.OrderDishRelation">
+        SELECT <include refid="Base_Column_List" />
+        FROM order_dish_relation
+        WHERE od_id = #{odID}
+    </select>
+    
+    <!-- selectByOrderId语句 -->
+    <select id="selectByOrderId" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.OrderDishRelation">
+        SELECT <include refid="Base_Column_List" />
+        FROM order_dish_relation
+        WHERE order_id = #{orderId}
+    </select>
+    
+    <!-- selectByDishId语句 -->
+    <select id="selectByDishId" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.OrderDishRelation">
+        SELECT <include refid="Base_Column_List" />
+        FROM order_dish_relation
+        WHERE dish_id = #{dishId}
+    </select>
+
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.orderfood.demos.web.mapper.CommentMapper">
+
+    <!-- 这里可以添加一些公共的sql片段 -->
+    <sql id="Base_Column_List">
+        comment_id, context, score, shop_id, user_id, dish_id, create_time
+    </sql>
+    
+    <!-- insert语句 -->
+    <insert id="insert" parameterType="com.example.orderfood.demos.web.model.Comment">
+        INSERT INTO comment (context, score, shop_id, user_id, dish_id, create_time)
+        VALUES (#{context}, #{score}, #{shopId}, #{userId}, #{dishId}, #{createTime})
+    </insert>
+    
+    <!-- deleteById语句 -->
+    <delete id="deleteById" parameterType="java.math.BigInteger">
+        DELETE FROM comment WHERE comment_id = #{commentId}
+    </delete>
+    
+    <!-- selectById语句 -->
+    <select id="selectById" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.Comment">
+        SELECT <include refid="Base_Column_List" />
+        FROM comment
+        WHERE comment_id = #{commentId}
+    </select>
+    
+    <!-- selectByShopId语句 -->
+    <select id="selectByShopId" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.Comment">
+        SELECT <include refid="Base_Column_List" />
+        FROM comment
+        WHERE shop_id = #{shopId}
+        ORDER BY create_time DESC
+    </select>
+    
+    <!-- selectByDishId语句 -->
+    <select id="selectByDishId" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.Comment">
+        SELECT <include refid="Base_Column_List" />
+        FROM comment
+        WHERE dish_id = #{dishId}
+        ORDER BY create_time DESC
+    </select>
+    
+    <!-- selectByUserId语句 -->
+    <select id="selectByUserId" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.Comment">
+        SELECT <include refid="Base_Column_List" />
+        FROM comment
+        WHERE user_id = #{userId}
+        ORDER BY create_time DESC
+    </select>
+    
+    <!-- selectAverageScoreByShopId语句 -->
+    <select id="selectAverageScoreByShopId" parameterType="java.math.BigInteger" resultType="java.math.BigDecimal">
+        SELECT AVG(score) FROM comment WHERE shop_id = #{shopId}
+    </select>
+    
+    <!-- selectAverageScoreByDishId语句 -->
+    <select id="selectAverageScoreByDishId" parameterType="java.math.BigInteger" resultType="java.math.BigDecimal">
+        SELECT AVG(score) FROM comment WHERE dish_id = #{dishId}
+    </select>
+
+</mapper>

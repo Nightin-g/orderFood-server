@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.orderfood.demos.web.mapper.ShopMapper">
+
+    <!-- 这里可以添加一些公共的sql片段 -->
+    <sql id="Base_Column_List">
+        shop_id, shop_name, shop_account, password, shop_status, shop_type, operating, 
+        shop_sales, delivery_fee, shop_phone, position, shop_score, shop_photo, shop_photo_id, create_time
+    </sql>
+    
+    <!-- insert语句 -->
+    <insert id="insert" parameterType="com.example.orderfood.demos.web.model.Shop">
+        INSERT INTO shop (shop_name, shop_account, password, shop_status, shop_type, operating, 
+                         shop_sales, delivery_fee, shop_phone, position, shop_score, shop_photo, shop_photo_id, create_time)
+        VALUES (#{shopName}, #{shopAccount}, #{password}, #{shopStatus}, #{shopType}, #{operating}, 
+               #{shopSales}, #{deliveryFee}, #{shopPhone}, #{position}, #{shopScore}, #{shopPhoto}, #{shopPhotoId}, #{createTime})
+    </insert>
+    
+    <!-- updateById语句模板 -->
+    <update id="updateById" parameterType="com.example.orderfood.demos.web.model.Shop">
+        <!-- 具体的update语句由用户补充 -->
+    </update>
+    
+    <!-- updateSelective语句模板 -->
+    <update id="updateSelective" parameterType="com.example.orderfood.demos.web.model.Shop">
+        <!-- 具体的update语句由用户补充 -->
+    </update>
+    
+    <!-- deleteById语句 -->
+    <delete id="deleteById" parameterType="java.math.BigInteger">
+        DELETE FROM shop WHERE shop_id = #{shopId}
+    </delete>
+    
+    <!-- selectById语句 -->
+    <select id="selectById" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.Shop">
+        SELECT <include refid="Base_Column_List" />
+        FROM shop
+        WHERE shop_id = #{shopId}
+    </select>
+    
+    <!-- selectAll语句 -->
+    <select id="selectAll" resultType="com.example.orderfood.demos.web.model.Shop">
+        SELECT <include refid="Base_Column_List" />
+        FROM shop
+    </select>
+    
+    <!-- selectByExample语句模板 -->
+    <select id="selectByExample" parameterType="com.example.orderfood.demos.web.model.Shop" resultType="com.example.orderfood.demos.web.model.Shop">
+        <!-- 具体的select语句由用户补充 -->
+    </select>
+    
+    <!-- 查询未审核的店铺 -->
+    <select id="selectPendingReview" resultType="com.example.orderfood.demos.web.model.Shop">
+        SELECT <include refid="Base_Column_List" />
+        FROM shop
+        WHERE shop_status = 0
+    </select>
+    
+    <!-- 根据店铺账号查询店铺 -->
+    <select id="selectByShopAccount" parameterType="java.lang.String" resultType="com.example.orderfood.demos.web.model.Shop">
+        SELECT <include refid="Base_Column_List" />
+        FROM shop
+        WHERE shop_account = #{shopAccount}
+    </select>
+    
+</mapper>

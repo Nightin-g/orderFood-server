@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.orderfood.demos.web.mapper.PhotoMapper">
+
+    <!-- 这里可以添加一些公共的sql片段 -->
+    <sql id="Base_Column_List">
+        photo_id, comment_id, shop_id, dish_id, user_id, activity_id, url
+    </sql>
+    
+    <!-- insert语句 -->
+    <insert id="insert" parameterType="com.example.orderfood.demos.web.model.Photo">
+        INSERT INTO photo (comment_id, shop_id, dish_id, user_id, activity_id, url)
+        VALUES (#{commentId}, #{shopId}, #{dishId}, #{userId}, #{activityId}, #{url})
+    </insert>
+    
+    <!-- updateById语句模板 -->
+    <update id="updateById" parameterType="com.example.orderfood.demos.web.model.Photo">
+        <!-- 具体的update语句由用户补充 -->
+    </update>
+    
+    <!-- updateSelective语句模板 -->
+    <update id="updateSelective" parameterType="com.example.orderfood.demos.web.model.Photo">
+        <!-- 具体的update语句由用户补充 -->
+    </update>
+    
+    <!-- deleteById语句 -->
+    <delete id="deleteById" parameterType="java.math.BigInteger">
+        DELETE FROM photo WHERE photo_id = #{photoId}
+    </delete>
+    
+    <!-- selectById语句 -->
+    <select id="selectById" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.Photo">
+        SELECT <include refid="Base_Column_List" />
+        FROM photo
+        WHERE photo_id = #{photoId}
+    </select>
+    
+    <!-- selectAll语句 -->
+    <select id="selectAll" resultType="com.example.orderfood.demos.web.model.Photo">
+        SELECT <include refid="Base_Column_List" />
+        FROM photo
+    </select>
+    
+    <!-- selectByExample语句模板 -->
+    <select id="selectByExample" parameterType="com.example.orderfood.demos.web.model.Photo" resultType="com.example.orderfood.demos.web.model.Photo">
+        <!-- 具体的select语句由用户补充 -->
+    </select>
+    
+    <!-- selectByCommentId语句 -->
+    <select id="selectByCommentId" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.Photo">
+        SELECT <include refid="Base_Column_List" />
+        FROM photo
+        WHERE comment_id = #{commentId}
+    </select>
+    
+    <!-- selectByShopId语句 -->
+    <select id="selectByShopId" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.Photo">
+        SELECT <include refid="Base_Column_List" />
+        FROM photo
+        WHERE shop_id = #{shopId}
+    </select>
+    
+    <!-- selectByDishId语句 -->
+    <select id="selectByDishId" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.Photo">
+        SELECT <include refid="Base_Column_List" />
+        FROM photo
+        WHERE dish_id = #{dishId}
+    </select>
+    
+    <!-- selectByUserId语句 -->
+    <select id="selectByUserId" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.Photo">
+        SELECT <include refid="Base_Column_List" />
+        FROM photo
+        WHERE user_id = #{userId}
+    </select>
+    
+    <!-- selectByActivityId语句 -->
+    <select id="selectByActivityId" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.Photo">
+        SELECT <include refid="Base_Column_List" />
+        FROM photo
+        WHERE activity_id = #{activityId}
+    </select>
+    
+</mapper>
