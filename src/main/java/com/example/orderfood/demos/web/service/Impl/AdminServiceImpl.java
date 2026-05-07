@@ -9,8 +9,10 @@ import com.example.orderfood.demos.web.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -46,5 +48,19 @@ public class AdminServiceImpl implements AdminService {
         redisTemplate.opsForValue().set(redisKey, token, 3600, TimeUnit.SECONDS);
 
         return R.success("登录成功").put("token", token).put("role", "admin");
+    }
+
+    @Override
+    public R getCurrentAdmin() {
+        Long adminIdLong = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        BigInteger adminId = BigInteger.valueOf(adminIdLong);
+
+        Administrator admin = administratorMapper.selectById(adminId);
+        if (admin == null) {
+            return R.error(404, "管理员不存在");
+        }
+
+        admin.setPassword(null);
+        return R.success(admin);
     }
 }

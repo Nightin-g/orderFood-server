@@ -227,6 +227,20 @@ public class UserServiceImpl implements UserService
         return R.success("更新成功");
     }
     
+    @Override
+    public R getCurrentUser() {
+        Long userIdLong = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        BigInteger userId = BigInteger.valueOf(userIdLong);
+
+        User user = userMapper.selectById(userId);
+        if (user == null) {
+            return R.error(404, "用户不存在");
+        }
+
+        user.setPassword(null);
+        return R.success(user);
+    }
+
     /**
      * 尝试获取分布式锁
      * @param lockKey 锁键

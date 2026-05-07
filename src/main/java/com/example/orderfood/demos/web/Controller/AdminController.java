@@ -31,6 +31,14 @@ public class AdminController {
     private AdminService adminService;
 
     /**
+     * 获取当前登录管理员信息
+     */
+    @GetMapping("/me")
+    public R getCurrentAdmin() {
+        return adminService.getCurrentAdmin();
+    }
+
+    /**
      * 管理员登录
      */
     @PostMapping("/login")

@@ -25,6 +25,14 @@ public class ShopController {
     private DishService dishService;
 
     /**
+     * 获取当前登录店铺信息
+     */
+    @GetMapping("/me")
+    public R getCurrentShop() {
+        return shopService.getCurrentShop();
+    }
+
+    /**
      * 店铺注册
      */
     @PostMapping("/register")

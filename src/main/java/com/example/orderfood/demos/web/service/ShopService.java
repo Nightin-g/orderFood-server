@@ -64,4 +64,6 @@ public interface ShopService {
      * 店铺永久停业
      */
     R permanentlyCloseShop();
+
+    R getCurrentShop();
 }

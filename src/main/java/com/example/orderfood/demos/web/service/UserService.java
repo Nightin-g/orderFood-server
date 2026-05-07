@@ -14,4 +14,6 @@ public interface UserService
     R updateUserInfo(UserUpdateDTO userUpdateDTO);
 
     R updatePassword(UserUpdateDTO userUpdateDTO);
+
+    R getCurrentUser();
 }

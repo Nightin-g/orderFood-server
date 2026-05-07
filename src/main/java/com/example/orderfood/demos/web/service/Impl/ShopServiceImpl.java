@@ -224,6 +224,20 @@ public class ShopServiceImpl implements ShopService {
         }
     }
     
+    @Override
+    public R getCurrentShop() {
+        Long shopIdLong = (Long) org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        BigInteger shopId = BigInteger.valueOf(shopIdLong);
+
+        Shop shop = shopMapper.selectById(shopId);
+        if (shop == null) {
+            return R.error(404, "店铺不存在");
+        }
+
+        shop.setPassword(null);
+        return R.success(shop);
+    }
+
     /**
      * 尝试获取分布式锁
      * @param lockKey 锁键

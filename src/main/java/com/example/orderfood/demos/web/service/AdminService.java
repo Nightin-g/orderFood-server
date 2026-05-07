@@ -5,4 +5,6 @@ import com.example.orderfood.demos.web.util.R;
 
 public interface AdminService {
     R adminLogin(AdminLoginDTO adminLoginDTO);
+
+    R getCurrentAdmin();
 }
