@@ -128,13 +128,13 @@ public class ShopServiceImpl implements ShopService {
         }
         
         // 6. 生成JWT令牌
-        String token = jwtUtils.generateToken(shop.getShopId().longValue(), shop.getShopAccount());
-        
+        String token = jwtUtils.generateToken(shop.getShopId().longValue(), shop.getShopAccount(), "shop");
+
         // 7. 将令牌存入Redis，设置过期时间为1小时
         String redisKey = "shop:token:" + shop.getShopId();
         redisTemplate.opsForValue().set(redisKey, token, 3600, TimeUnit.SECONDS);
-        
-        return R.success("登录成功");
+
+        return R.success("登录成功").put("token", token).put("role", "shop");
     }
     
     @Override

@@ -4,7 +4,7 @@
 
 | 接口路径 | 方法 | 功能描述 | 请求参数 | 成功响应 |
 |---------|------|---------|---------|---------|
-| `/user/login` | POST | 用户登录 | `{"userAccount": "用户账号", "password": "密码"}` | `{"code": 200, "msg": "登录成功", "data": null}` |
+| `/user/login` | POST | 用户登录 | `{"userAccount": "用户账号", "password": "密码"}` | `{"code": 200, "msg": "登录成功", "extra": {"token": "JWT令牌", "role": "user"}}` |
 | `/user/register` | POST | 用户注册 | `{"userAccount": "用户账号", "password": "密码", "confirmPassword": "确认密码", "phoneNum": "手机号", "userName": "用户名(可选)"}` | `{"code": 200, "msg": "注册成功", "data": null}` |
 | `/user/update` | PUT | 修改用户信息 | `{"userName": "用户名", "sex": 0, "address": "地址", "userPhoto": "头像URL", "phone": "手机号"}` | `{"code": 200, "msg": "更新成功", "data": null}` |
 | `/user/updatePwd` | POST | 修改密码 | `{"userId": "用户ID", "password": "旧密码", "newPassword": "新密码", "captcha": "验证码", "captchaKey": "验证码密钥"}` | `{"code": 200, "msg": "密码更新成功", "data": null}` |
@@ -31,7 +31,7 @@
 | 接口路径 | 方法 | 功能描述 | 请求参数 | 成功响应 |
 |---------|------|---------|---------|---------|
 | `/shop/register` | POST | 店铺注册 | `{"shopName": "店铺名称", "shopAccount": "店铺账号", "password": "密码", "confirmPassword": "确认密码", "shopType": 0, "shopPhone": "店铺电话", "position": 0, "captcha": "验证码", "captchaKey": "验证码密钥"}` | `{"code": 200, "msg": "注册成功，等待审核", "data": null}` |
-| `/shop/login` | POST | 店铺登录 | `{"shopAccount": "店铺账号", "password": "密码", "captcha": "验证码", "captchaKey": "验证码密钥"}` | `{"code": 200, "msg": "登录成功", "data": null}` |
+| `/shop/login` | POST | 店铺登录 | `{"shopAccount": "店铺账号", "password": "密码", "captcha": "验证码", "captchaKey": "验证码密钥"}` | `{"code": 200, "msg": "登录成功", "extra": {"token": "JWT令牌", "role": "shop"}}` |
 | `/shop/update` | PUT | 修改店铺信息 | `{"shopName": "店铺名称", "shopType": 0, "shopPhone": "电话", "deliveryFee": 0.00, "shopPhoto": "图片URL", "operating": 0, "position": 0}` | `{"code": 200, "msg": "更新成功", "data": null}` |
 | `/shop/dishes` | POST | 添加菜品 | `{"dishName": "菜品名称", "categoryId": "分类ID", "price": 0.00, "ingredients": "食材成分", "dishPhoto": "菜品图片URL", "dishPhotoId": "图片ID"}` | `{"code": 200, "msg": "添加菜品成功，等待审核", "data": null}` |
 | `/shop/status/open` | PUT | 店铺开始营业 | 无 | `{"code": 200, "msg": "店铺已开始营业", "data": null}` |
@@ -215,12 +215,15 @@
 
 | 接口路径 | 方法 | 功能描述 | 请求参数 | 成功响应 |
 |---------|------|---------|---------|---------|
+| `/admin/login` | POST | 管理员登录 | `{"adminAccount": "管理员账号", "password": "密码"}` | `{"code": 200, "msg": "登录成功", "extra": {"token": "JWT令牌", "role": "admin"}}` |
 | `/admin/dishes/pending` | GET | 查询未审核的菜品 | 无 | `{"code": 200, "msg": "查询未审核菜品成功", "data": [Dish对象列表]}` |
 | `/admin/shops/pending` | GET | 查询未审核的店铺 | 无 | `{"code": 200, "msg": "查询未审核店铺成功", "data": [Shop对象列表]}` |
 | `/admin/dishes/{dishId}/approve` | PUT | 审核菜品通过 | `dishId`（路径参数） | `{"code": 200, "msg": "审核通过成功", "data": null}` |
 | `/admin/dishes/{dishId}/reject` | PUT | 审核菜品不通过 | `dishId`（路径参数） | `{"code": 200, "msg": "审核不通过成功", "data": null}` |
 | `/admin/shops/{shopId}/approve` | PUT | 审核店铺通过 | `shopId`（路径参数） | `{"code": 200, "msg": "审核通过成功", "data": null}` |
 | `/admin/shops/{shopId}/reject` | PUT | 审核店铺不通过 | `shopId`（路径参数） | `{"code": 200, "msg": "审核不通过成功", "data": null}` |
+
+**注意：管理员账号不开放注册，由系统初始化（默认账号: admin / 123456）。**
 
 ## 8. 图片接口
 
@@ -286,16 +289,25 @@
 | 404 | 资源不存在 |
 | 500 | 系统内部错误 |
 
-## 10. 认证说明
+## 10. 角色体系
+
+系统分为三种角色，分别对应不同的数据库表：
+
+| 角色 | 表名 | 描述 |
+|------|------|------|
+| `user` | user | 普通用户 - 可注册、登录、订餐、查看菜品和评论 |
+| `shop` | shop | 店铺用户 - 可注册、登录（需管理员审核后才能启用），管理店铺和菜品 |
+| `admin` | administrator | 管理员 - 不开放注册，由系统初始化，负责审核店铺和菜品 |
 
 ### 10.1 公开接口
 
-以下接口不需要认证即可访问（与SecurityConfig中配置一致）：
+以下接口不需要认证即可访问：
 
 - `/user/login`
 - `/user/register`
 - `/shop/login`
 - `/shop/register`
+- `/admin/login`
 - `/captcha/**`
 
 ### 10.2 认证方式
@@ -308,12 +320,27 @@ Authorization: Bearer {token}
 
 ### 10.3 登录流程
 
-1. 获取验证码：调用 `/captcha/generate`，从响应头获取 `Captcha-Key`
-2. 调用登录接口：携带 `captcha` 和 `captchaKey`（店铺登录需要验证码）
-3. 登录成功后，token存入Redis（key格式: `user:token:{userId}` 或 `shop:token:{shopId}`），过期时间1小时
-4. 后续请求在 `Authorization` 请求头中携带token
+1. 根据角色选择对应的登录接口（`/user/login`、`/shop/login`、`/admin/login`）
+2. 店铺登录需要先获取验证码：调用 `/captcha/generate`，从响应头获取 `Captcha-Key`
+3. 调用登录接口，登录成功后响应 `extra` 中包含 `token` 和 `role`
+4. token存入Redis（key格式: `user:token:{id}`、`shop:token:{id}`、`admin:token:{id}`），过期时间1小时
+5. 后续请求在 `Authorization` 请求头中携带token
 
-### 10.4 用户状态枚举 (UserStatusEnum)
+### 10.4 登录响应格式
+
+```json
+{
+  "code": 200,
+  "msg": "登录成功",
+  "data": null,
+  "extra": {
+    "token": "eyJhbGciOiJIUzI1NiJ9...",
+    "role": "user"
+  }
+}
+```
+
+### 10.5 用户状态枚举 (UserStatusEnum)
 
 | 状态码 | 状态名称 | 描述 |
 |-------|---------|------|
@@ -321,7 +348,7 @@ Authorization: Bearer {token}
 | 1 | RESTRICTED | 受限 |
 | 2 | CANCELLED | 注销 |
 
-### 10.5 分类状态枚举 (CategoryStatusEnum)
+### 10.6 分类状态枚举 (CategoryStatusEnum)
 
 | 状态码 | 状态名称 | 描述 |
 |-------|---------|------|
@@ -329,7 +356,7 @@ Authorization: Bearer {token}
 | 1 | IN_USE | 正在使用 |
 | 2 | TEMPORARILY_DISABLED | 暂时停用 |
 
-### 10.6 认证失败响应
+### 10.7 认证失败响应
 
 ```json
 {

@@ -60,13 +60,13 @@ public class UserServiceImpl implements UserService
         }
         
         // 5. 生成JWT令牌
-        String token = jwtUtils.generateToken(user.getUserId().longValue(), user.getUserAccount());
-        
+        String token = jwtUtils.generateToken(user.getUserId().longValue(), user.getUserAccount(), "user");
+
         // 6. 将令牌存入Redis，设置过期时间为1小时
         String redisKey = "user:token:" + user.getUserId();
         redisTemplate.opsForValue().set(redisKey, token, 3600, TimeUnit.SECONDS);
-        
-        return R.success("登录成功");
+
+        return R.success("登录成功").put("token", token).put("role", "user");
     }
 
     @Override
@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService
             user.setPassword(encryptedPassword);
             user.setUserName(userRegisterDTO.getUserName() != null ? userRegisterDTO.getUserName() : userAccount);
             user.setPhoneNum(userRegisterDTO.getPhoneNum());
-            user.setUserStatus(0); // 1表示启用
+            user.setUserStatus(0); // 0表示启用
             user.setCreateTime(java.time.LocalDateTime.now());
             
             // 6. 执行注册

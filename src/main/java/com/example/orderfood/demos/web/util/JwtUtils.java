@@ -32,13 +32,15 @@ public class JwtUtils {
      * 生成JWT令牌
      * @param userId 用户ID
      * @param userAccount 用户名
+     * @param role 角色: user/shop/admin
      * @return JWT令牌
      */
-    public String generateToken(Long userId, String userAccount) {
+    public String generateToken(Long userId, String userAccount, String role) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
         claims.put("userAccount", userAccount);
-        
+        claims.put("role", role);
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(new Date())
@@ -89,5 +91,14 @@ public class JwtUtils {
      */
     public Long getUserIdFromToken(String token) {
         return parseToken(token).get("userId", Long.class);
+    }
+
+    /**
+     * 从JWT令牌中获取角色
+     * @param token JWT令牌
+     * @return 角色
+     */
+    public String getRoleFromToken(String token) {
+        return parseToken(token).get("role", String.class);
     }
 }

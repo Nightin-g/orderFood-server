@@ -32,30 +32,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         // 1. 从请求头中获取Authorization字段
         String token = getTokenFromRequest(request);
-        
+
         // 2. 验证令牌
         if (StringUtils.hasText(token) && jwtUtils.validateToken(token)) {
-            // 3. 从令牌中获取用户/店铺ID
+            // 3. 从令牌中获取用户/店铺ID和角色
             Long id = jwtUtils.getUserIdFromToken(token);
-            String account = jwtUtils.getUserAccountFromToken(token);
-            
-            // 4. 验证令牌是否在Redis中有效
-            // 尝试用户令牌
-            String userRedisKey = "user:token:" + id;
-            String userRedisToken = redisTemplate.opsForValue().get(userRedisKey);
-            
-            // 尝试店铺令牌
-            String shopRedisKey = "shop:token:" + id;
-            String shopRedisToken = redisTemplate.opsForValue().get(shopRedisKey);
-            
-            if (token.equals(userRedisToken) || token.equals(shopRedisToken)) {
-                // 5. 设置认证信息（这里简化处理，实际项目中应该从数据库获取用户/店铺权限信息）
+            String role = jwtUtils.getRoleFromToken(token);
+
+            // 4. 根据角色验证令牌是否在Redis中有效
+            String redisKey;
+            if ("admin".equals(role)) {
+                redisKey = "admin:token:" + id;
+            } else if ("shop".equals(role)) {
+                redisKey = "shop:token:" + id;
+            } else {
+                redisKey = "user:token:" + id;
+            }
+            String redisToken = redisTemplate.opsForValue().get(redisKey);
+
+            if (token.equals(redisToken)) {
+                // 5. 设置认证信息
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(id, null, null);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
-        
+
         chain.doFilter(request, response);
     }
     

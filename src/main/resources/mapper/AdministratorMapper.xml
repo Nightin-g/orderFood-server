@@ -15,9 +15,15 @@
         VALUES (#{adminName}, #{phoneNum}, #{adminAccount}, #{password}, #{jurisdiction})
     </insert>
     
-    <!-- updateById语句模板 -->
+    <!-- updateById语句 -->
     <update id="updateById" parameterType="com.example.orderfood.demos.web.model.Administrator">
-        <!-- 具体的update语句由用户补充 -->
+        UPDATE administrator
+        SET admin_name = #{adminName},
+            phone_num = #{phoneNum},
+            admin_account = #{adminAccount},
+            password = #{password},
+            jurisdiction = #{jurisdiction}
+        WHERE admin_id = #{adminId}
     </update>
     
     <!-- updateSelective语句模板 -->
@@ -35,6 +41,13 @@
         SELECT <include refid="Base_Column_List" />
         FROM administrator
         WHERE admin_id = #{adminId}
+    </select>
+
+    <!-- selectByAdminAccount语句 -->
+    <select id="selectByAdminAccount" parameterType="java.lang.String" resultType="com.example.orderfood.demos.web.model.Administrator">
+        SELECT <include refid="Base_Column_List" />
+        FROM administrator
+        WHERE admin_account = #{adminAccount}
     </select>
     
     <!-- selectAll语句 -->

@@ -18,7 +18,9 @@ public interface AdministratorMapper {
     int deleteById(@Param("adminId") BigInteger adminId);
     
     Administrator selectById(@Param("adminId") BigInteger adminId);
-    
+
+    Administrator selectByAdminAccount(@Param("adminAccount") String adminAccount);
+
     List<Administrator> selectAll();
     
     List<Administrator> selectByExample(Administrator administrator);
