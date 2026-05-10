@@ -61,7 +61,7 @@ public class PhotoServiceImpl implements PhotoService {
      * 支持的图片类型列表
      */
     private static final java.util.List<String> SUPPORTED_TYPES =
-            java.util.Arrays.asList("activities", "avatars", "comments", "dishes", "shops");
+            java.util.Arrays.asList("avatars", "comments", "dishes", "shops");
 
     /**
      * 插入图片记录
@@ -74,7 +74,6 @@ public class PhotoServiceImpl implements PhotoService {
         photo.setShopId(dto.getShopId());
         photo.setDishId(dto.getDishId());
         photo.setUserId(dto.getUserId());
-        photo.setActivityId(dto.getActivityId());
         photoMapper.insert(photo);
     }
 
@@ -122,7 +121,6 @@ public class PhotoServiceImpl implements PhotoService {
             photo.setShopId(dto.getShopId());
             photo.setDishId(dto.getDishId());
             photo.setUserId(dto.getUserId());
-            photo.setActivityId(dto.getActivityId());
             photo.setUrl(fileUrl);
             
             photoMapper.insert(photo);

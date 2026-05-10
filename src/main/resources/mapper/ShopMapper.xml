@@ -64,5 +64,12 @@
         FROM shop
         WHERE shop_account = #{shopAccount}
     </select>
-    
+
+    <!-- 查询所有已审核通过的店铺 -->
+    <select id="selectApproved" resultType="com.example.orderfood.demos.web.model.Shop">
+        SELECT <include refid="Base_Column_List" />
+        FROM shop
+        WHERE shop_status NOT IN (0, 5)
+    </select>
+
 </mapper>

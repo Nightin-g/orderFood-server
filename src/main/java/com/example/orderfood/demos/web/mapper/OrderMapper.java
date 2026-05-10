@@ -22,4 +22,9 @@ public interface OrderMapper {
     List<Order> selectAll();
     
     List<Order> selectByExample(Order order);
+
+    /**
+     * 根据用户ID查询订单列表
+     */
+    List<Order> selectByUserId(@Param("userId") BigInteger userId);
 }

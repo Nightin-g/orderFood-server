@@ -42,6 +42,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         // 允许公开访问的接口
         .antMatchers("/user/login", "/user/register", "/shop/login", "/shop/register", "/admin/login", "/captcha/**").permitAll()
+        // 菜品浏览公开
+        .antMatchers("/dish/**").permitAll()
+        // 店铺列表和详情公开
+        .antMatchers("/shop/list", "/shop/detail/**").permitAll()
+        // 评论浏览公开
+        .antMatchers("/comment/shop/**", "/comment/dish/**").permitAll()
         // 其他所有接口需要认证
         .anyRequest().authenticated();
         

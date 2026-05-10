@@ -30,6 +30,4 @@ public interface PhotoMapper {
     List<Photo> selectByDishId(@Param("dishId") BigInteger dishId);
     
     List<Photo> selectByUserId(@Param("userId") BigInteger userId);
-    
-    List<Photo> selectByActivityId(@Param("activityId") BigInteger activityId);
 }

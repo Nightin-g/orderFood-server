@@ -436,6 +436,25 @@ public class ShopServiceImpl implements ShopService {
     }
     
     @Override
+    public List<Shop> getApprovedShops() {
+        List<Shop> shops = shopMapper.selectApproved();
+        for (Shop shop : shops) {
+            shop.setPassword(null);
+        }
+        return shops;
+    }
+
+    @Override
+    public R getShopDetail(BigInteger shopId) {
+        Shop shop = shopMapper.selectById(shopId);
+        if (shop == null) {
+            return R.error(404, "店铺不存在");
+        }
+        shop.setPassword(null);
+        return R.success(shop);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public R permanentlyCloseShop() {
         // 1. 从SecurityContext中获取当前登录店铺的ID

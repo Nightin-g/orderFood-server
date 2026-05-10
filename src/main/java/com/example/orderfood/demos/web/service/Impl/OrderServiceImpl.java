@@ -4,9 +4,11 @@ import com.example.orderfood.demos.web.DTO.OrderCreateDTO;
 import com.example.orderfood.demos.web.DTO.OrderItemDTO;
 import com.example.orderfood.demos.web.enums.OrderStatusEnum;
 import com.example.orderfood.demos.web.exception.BusinessException;
+import com.example.orderfood.demos.web.mapper.DishMapper;
 import com.example.orderfood.demos.web.mapper.OrderDishRelationMapper;
 import com.example.orderfood.demos.web.mapper.OrderMapper;
 import com.example.orderfood.demos.web.mapper.ShopMapper;
+import com.example.orderfood.demos.web.model.Dish;
 import com.example.orderfood.demos.web.model.Order;
 import com.example.orderfood.demos.web.model.OrderDishRelation;
 import com.example.orderfood.demos.web.service.OrderService;
@@ -20,7 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -38,10 +43,13 @@ public class OrderServiceImpl implements OrderService {
     
     @Autowired
     private OrderDishRelationMapper orderDishRelationMapper;
-    
+
     @Autowired
     private ShopMapper shopMapper;
-    
+
+    @Autowired
+    private DishMapper dishMapper;
+
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
@@ -82,32 +90,50 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getUserOrders() {
-        // 获取当前登录用户的ID
         BigInteger userId = getCurrentUserId();
-        
-        // 查询用户的所有订单
-        // 注意：实际项目中需要在OrderMapper中添加selectByUserId方法
-        return null;
+        return orderMapper.selectByUserId(userId);
     }
 
     @Override
     public R getOrderDetail(BigInteger orderId) {
-        // 1. 查询订单详情
+        // 1. 查询订单
         Order order = orderMapper.selectById(orderId);
         if (order == null) {
             throw new BusinessException(404, "订单不存在");
         }
-        
+
         // 2. 验证订单是否属于当前用户
         BigInteger userId = getCurrentUserId();
         if (!order.getUserId().equals(userId)) {
             throw new BusinessException(403, "无权查看该订单");
         }
-        
+
         // 3. 查询订单商品详情
-        // 注意：实际项目中需要查询OrderDishRelation和对应的商品信息
-        
-        return R.success("查询订单详情成功", order);
+        List<OrderDishRelation> relations = orderDishRelationMapper.selectByOrderId(orderId);
+        List<Map<String, Object>> items = new ArrayList<>();
+        for (OrderDishRelation relation : relations) {
+            Dish dish = dishMapper.selectById(relation.getDishId());
+            if (dish != null) {
+                Map<String, Object> item = new HashMap<>();
+                item.put("dishId", dish.getDishId());
+                item.put("dishName", dish.getDishName());
+                item.put("price", dish.getPrice());
+                item.put("quantity", 1);
+                items.add(item);
+            }
+        }
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("orderId", order.getOrderId());
+        result.put("orderNum", order.getOrderNum());
+        result.put("userId", order.getUserId());
+        result.put("orderPrice", order.getOrderPrice());
+        result.put("orderStatus", order.getOrderStatus());
+        result.put("createTime", order.getCreateTime());
+        result.put("finishTime", order.getFinishTime());
+        result.put("items", items);
+
+        return R.success("查询订单详情成功", result);
     }
 
     @Override

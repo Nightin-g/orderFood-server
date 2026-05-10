@@ -32,4 +32,9 @@ public interface ShopMapper {
      * 根据店铺账号查询店铺
      */
     Shop selectByShopAccount(@Param("shopAccount") String shopAccount);
+
+    /**
+     * 查询所有已审核通过的店铺（非待审核、非审核未通过）
+     */
+    List<Shop> selectApproved();
 }

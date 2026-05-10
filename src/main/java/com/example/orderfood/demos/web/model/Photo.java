@@ -16,6 +16,5 @@ public class Photo
     private BigInteger shopId;
     private BigInteger dishId;
     private BigInteger userId;
-    private BigInteger activityId;
     private String url;
 }

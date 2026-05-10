@@ -66,4 +66,14 @@ public interface ShopService {
     R permanentlyCloseShop();
 
     R getCurrentShop();
+
+    /**
+     * 获取所有已审核通过的店铺列表（公开访问）
+     */
+    List<Shop> getApprovedShops();
+
+    /**
+     * 获取单个店铺详情（公开访问）
+     */
+    R getShopDetail(BigInteger shopId);
 }

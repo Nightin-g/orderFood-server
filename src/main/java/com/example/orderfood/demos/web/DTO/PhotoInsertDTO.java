@@ -15,33 +15,13 @@ import java.math.BigInteger;
 @NoArgsConstructor
 public class PhotoInsertDTO {
     
-    /**
-     * 图片类型：activities, avatars, comments, dishes, shops
-     */
     private String type;
-    
-    /**
-     * 关联的评论ID（可选）
-     */
+
     private BigInteger commentId;
-    
-    /**
-     * 关联的店铺ID（可选）
-     */
+
     private BigInteger shopId;
-    
-    /**
-     * 关联的菜品ID（可选）
-     */
+
     private BigInteger dishId;
-    
-    /**
-     * 关联的用户ID（可选）
-     */
+
     private BigInteger userId;
-    
-    /**
-     * 关联的活动ID（可选）
-     */
-    private BigInteger activityId;
 }

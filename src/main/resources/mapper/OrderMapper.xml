@@ -15,9 +15,13 @@
         VALUES (#{orderStatus}, #{orderPrice}, #{orderNum}, #{createTime}, #{finishTime}, #{userId})
     </insert>
     
-    <!-- updateById语句模板 -->
+    <!-- updateById -->
     <update id="updateById" parameterType="com.example.orderfood.demos.web.model.Order">
-        <!-- 具体的update语句由用户补充 -->
+        UPDATE `order`
+        SET order_status = #{orderStatus},
+            order_price = #{orderPrice},
+            finish_time = #{finishTime}
+        WHERE order_id = #{orderId}
     </update>
     
     <!-- updateSelective语句模板 -->
@@ -47,5 +51,13 @@
     <select id="selectByExample" parameterType="com.example.orderfood.demos.web.model.Order" resultType="com.example.orderfood.demos.web.model.Order">
         <!-- 具体的select语句由用户补充 -->
     </select>
-    
+
+    <!-- 根据用户ID查询订单列表 -->
+    <select id="selectByUserId" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.Order">
+        SELECT <include refid="Base_Column_List" />
+        FROM `order`
+        WHERE user_id = #{userId}
+        ORDER BY create_time DESC
+    </select>
+
 </mapper>

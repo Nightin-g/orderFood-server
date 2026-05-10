@@ -4,11 +4,15 @@ import com.example.orderfood.demos.web.DTO.DishInsertDTO;
 import com.example.orderfood.demos.web.DTO.ShopLoginDTO;
 import com.example.orderfood.demos.web.DTO.ShopRegisterDTO;
 import com.example.orderfood.demos.web.DTO.ShopUpdateDTO;
+import com.example.orderfood.demos.web.model.Shop;
 import com.example.orderfood.demos.web.service.DishService;
 import com.example.orderfood.demos.web.service.ShopService;
 import com.example.orderfood.demos.web.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigInteger;
+import java.util.List;
 
 /**
  * 店铺控制器
@@ -102,5 +106,22 @@ public class ShopController {
     @PutMapping("/status/permanent-close")
     public R permanentlyCloseShop() {
         return shopService.permanentlyCloseShop();
+    }
+
+    /**
+     * 获取所有已审核通过的店铺列表（公开访问）
+     */
+    @GetMapping("/list")
+    public R getShopList() {
+        List<Shop> shops = shopService.getApprovedShops();
+        return R.success("查询店铺列表成功", shops);
+    }
+
+    /**
+     * 获取单个店铺详情（公开访问）
+     */
+    @GetMapping("/detail/{shopId}")
+    public R getShopDetail(@PathVariable("shopId") BigInteger shopId) {
+        return shopService.getShopDetail(shopId);
     }
 }

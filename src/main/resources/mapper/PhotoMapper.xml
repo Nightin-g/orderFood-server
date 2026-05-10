@@ -6,13 +6,13 @@
 
     <!-- 这里可以添加一些公共的sql片段 -->
     <sql id="Base_Column_List">
-        photo_id, comment_id, shop_id, dish_id, user_id, activity_id, url
+        photo_id, comment_id, shop_id, dish_id, user_id, url
     </sql>
     
     <!-- insert语句 -->
     <insert id="insert" parameterType="com.example.orderfood.demos.web.model.Photo">
-        INSERT INTO photo (comment_id, shop_id, dish_id, user_id, activity_id, url)
-        VALUES (#{commentId}, #{shopId}, #{dishId}, #{userId}, #{activityId}, #{url})
+        INSERT INTO photo (comment_id, shop_id, dish_id, user_id, url)
+        VALUES (#{commentId}, #{shopId}, #{dishId}, #{userId}, #{url})
     </insert>
     
     <!-- updateById语句模板 -->
@@ -76,11 +76,5 @@
         WHERE user_id = #{userId}
     </select>
     
-    <!-- selectByActivityId语句 -->
-    <select id="selectByActivityId" parameterType="java.math.BigInteger" resultType="com.example.orderfood.demos.web.model.Photo">
-        SELECT <include refid="Base_Column_List" />
-        FROM photo
-        WHERE activity_id = #{activityId}
-    </select>
-    
+
 </mapper>
